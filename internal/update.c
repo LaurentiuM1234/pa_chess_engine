@@ -3,15 +3,20 @@
 #include "../debug/fatal.h"
 
 
-static int is_quiet(side_t side, uint64_t target_bitboard, int captured_piece)
-{
+static int is_quiet(side_t side, uint64_t target_bitboard, int captured_piece, int moved_piece)
+{	
+	// moved piece is not a pawn
+	if (captured_piece == 0 && moved_piece != ALL_PAWNS)
+        	return 1;
+
+    // moved piece is pawn
     if (side == WHITE) {
-        if ((target_bitboard & ~RANK_8) && (captured_piece == 0))
+        if ((target_bitboard & ~RANK_8) && (captured_piece == 0) && (moved_piece == ALL_PAWNS))
             return 1;
         else
             return 0;
     } else {
-        if ((target_bitboard & ~RANK_1) && (captured_piece == 0))
+        if ((target_bitboard & ~RANK_1) && (captured_piece == 0) &&  (moved_piece == ALL_PAWNS))
             return 1;
         else
             return 0;
@@ -163,7 +168,7 @@ static void update_by_in(board_t *board, side_t side, move_t in_move)
     if (moved_piece == 0 || !(src_bitboard & get_bitboard(board, side)))
         FATAL_ERROR("Invalid move.");
 
-    if (is_quiet(side, target_bitboard, captured_piece))
+    if (is_quiet(side, target_bitboard, captured_piece, moved_piece))
         update_quiet(board, side, src_bitboard, target_bitboard, moved_piece);
     else if (is_capture(side, target_bitboard, captured_piece, moved_piece))
         update_capture(board, side, src_bitboard, target_bitboard, moved_piece, captured_piece);
