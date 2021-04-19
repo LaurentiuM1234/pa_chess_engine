@@ -1,0 +1,9 @@
+(*) issues
+-> castling moves are not supported
+
+
+(*) improvements
+-> maybe rework module dependency?
+-> check to see if all generated pawn moves are valid
+-> make sure that the board updating is done correctly
+-> double check the returned types

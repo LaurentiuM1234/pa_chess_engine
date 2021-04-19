@@ -1,0 +1,168 @@
+=============================IMPORTANT NOTES===============================
+-> currently, engine does not support castling moves from XBoard and it does
+not detect whether the king is in check(it will try to send a move after
+the king gets in check position and then it will stop working properly)
+-> the engine can only move pawns and it will resign if there's no pawn moves
+left to generate
+===========================================================================
+
+==============================COMPILATION===================================
+(*)steps: 1)make sure that the current directory is the one containing
+the Makefile
+          2)use 'make' or 'make build' to compile the program
+============================================================================
+
+===========================PROJECT STRUCTURE================================
+-> project has 2 main components: the controller and the internal board
+logic.
+
+(*)controller: 1)PRINCIPLES
+                - mediate the communication between XBoard and the
+                internal board logic.
+                - offer modularity.
+                - hide the I/O processing from the internal board logic
+                processing.
+
+               2)STRUCTURE
+                - 4 components: I)_in_buffer:
+                                - holds the moves given to the engine
+                                by XBoard that have to be processed
+                                by the internal board logic component.
+                                II)_out_buffer:
+                                - holds the moves given to XBoard by
+                                the engine.
+                                III)_cmd_buffer:
+                                - holds the commands given to the engine
+                                by XBoard that have to be processes by
+                                the controller itself.
+                                IV)_flags:
+                                - holds information about how the engine
+                                should react + misc. information to help
+                                the engine function.
+                                - e.g: if the C_RESIGN flag is set by the
+                                internal board logic component the controller
+                                has to inform XBoard that the engine has resigned
+                                       if the C_FORCE flag is set by the
+                                the controller then the internal board logic
+                                component is not allowed to generate any moves
+
+                - the structure is made opaque to reduce the number of
+                mistakes made by the programmer and to offer data
+                encapsulation.
+                - found in controller directory.
+
+                3)WORKFLOW
+                - when first started, controller performs a handshake
+                with XBoard specifying some features if the version allows
+                it.
+                - after the handshake, the controller starts taking input
+                from XBoard and processes it by setting flags accordingly.
+                - if the controller receives a move from XBoard, it places
+                it in the input buffer(@_in_buffer) so that the internal
+                board logic component can process it; it also, toggles
+                the C_STM flag so that the internal logic component will
+                know if it can generate moves or not.
+                - after the internal board logic does its processing, the
+                controller informs XBoard if needed.
+
+(*)internal board logic: 1)PRINCIPLES
+                          - internal board logic is divided into 3 major
+                          components: move generation, move evaluation,
+                          board update which offers modularity and a clean
+                          representation of how the engine does its internal
+                          logic.
+
+                         2)STRUCTURE
+                          - 3 components: I)generators:
+                                          - folder which contains move
+                                          generation modules for each of the
+                                          pieces(only pawn move generation
+                                          available for now) and the main
+                                          move generation module which
+                                          combines all move generation modules
+                                          for the pieces.
+                                          II)evaluator
+                                          - module which handles the move selection.
+                                          process
+                                          III)update
+                                          - module which handles board updating
+                                          process.
+
+                          - apart from the 3 main components, the internal board
+                          logic contains 3 secondary components:
+                          I)containers:
+                          - folder which contains the data structures used by the
+                          engine.
+                          II)models:
+                          - folder which contains modules that define how a board
+                          and a move are represented and various functions used to
+                          manipulate them.
+                          III)logic:
+                          - the main module of this component.
+                          - handles the internal board logic processing
+                          using the 3 main components mentioned above
+                          and the controller's current state.
+
+                          3)WORKFLOW
+                          - in a nutshell, the internal logic processing
+                          component checks the state of the controller
+                          (the flags and the input buffer) and acts
+                          accordingly
+                          - e.g: if C_NEW was set, the board needs to be
+                          cleared
+                                 if C_FORCE was set and the input buffer
+                          contains a move, then it needs to update the
+                          board for the side which does the move
+============================================================================
+
+==============================ALGORITHMS USED==================================
+(*)pawn move generation: - basically all of the functions that start with @add
+                         from the @pawn module do a linear traversal through
+                         all possible pawn moves.
+                         - @add_quiets has a time complexity of O(n), n = number
+                         of pawns because all operations inside the loop are done in
+                         constant time(the push operation from the arraylist has an
+                         amortized cost of O(1)).
+                         - @add_captures has a time complexity of O(n), n = number
+                         of pawns because it does the same operations as @add_quiets +
+                         it computes the piece code for the captured piece which is
+                         done in constant time because the number of types of pieces
+                         never changes.
+
+                         MOVE GENERATION "ON-SPOT" VS LOOKUP TABLES
+                         - we chose not to use lookup tables for pawn movement generation
+                         because because it would have added an extra loop(iterating through
+                         all possible moves for a pawn position) in the main loop(iterating
+                         through all pawns).
+                         - we actually tried the lookup table version and generating all
+                         possible moves for the initial positions of the pawns was 6 times
+                         slower than our current implementation.
+
+(*)move selection: - @select_move does a linear traversal through all available moves
+                   in a given arraylist which has a time complexity of O(n), n = number
+                   of available moves
+                   - we chose a linear traversal because we have to look through all
+                   available moves in order to find the one with the highest score
+
+(*)board update: - the board updating process is done in constant time
+=================================================================================
+
+================================SOURCES==========================================
+1) PAWN MOVE GENERATION + MOVE ENCODING
+https://peterellisjones.tumblr.com/post/41238723473/chess-engine-part-ii-move-encoding-and-move
+2) INTERNAL BOARD REPRESENTATION + RANDOM EXPLANATIONS
+https://www.chessprogramming.org/Main_Page
+3) FOR BETTER UNDERSTANDING HOW BITBOARDS AND MOVE GENERATION WORKS
+https://www.youtube.com/watch?v=QUNP-UjujBM&list=PLmN0neTso3Jxh8ZIylk74JpwfiWNI76Cs
+4) INFO. ABOUT PIECE REPRESENTATION
+http://pages.cs.wisc.edu/~psilord/blog/data/chess-pages/physical.html
+=================================================================================
+
+================================RESPONSIBILITIES=================================
+COMAN Robert-Alexandru -> all controller-related work
+VRABIE-DINU DARIAN -> board representation, move representation, move evaluation
+@logic module
+MIHALCEA Laurentiu-Cristian -> move generation, board update, @containers
+=================================================================================
+
+

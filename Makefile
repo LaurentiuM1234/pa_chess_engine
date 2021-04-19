@@ -1,11 +1,12 @@
 CC = gcc
 CFLAGS = -Wall
+LIBS = -lm
 .PHONY: all clean run build
 
-all: build run clean
+all: build
 
-build: $(wildcard *.c)
-	$(CC) $(CFLAGS) $^ -o program
+build: $(wildcard controller/*.c debug/*.c internal/*.c internal/containers/*.c internal/generators/*.c internal/models/*.c *.c)
+	$(CC) $(CFLAGS) $^ -o program $(LIBS)
 run:
 	./program
 clean:
