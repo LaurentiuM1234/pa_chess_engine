@@ -7,6 +7,9 @@
 #define M_QUIET 1U
 #define M_DOUBLE_PUSH 2U
 #define M_CAPTURE 4U
+#define M_KNIGHT_PROM 5U
+#define M_ROOK_PROM 6U
+#define M_BISHOP_PROM 7U
 #define M_QUEEN_PROM 8U
 /*=================================*/
 
