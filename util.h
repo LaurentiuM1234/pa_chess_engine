@@ -65,4 +65,6 @@ uint64_t generate_magic_number();
 
 uint64_t get_bit(uint64_t n, int pos);
 
+int is_promotion(char *buffer);
+
 #endif

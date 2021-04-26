@@ -14,7 +14,6 @@ static void add_quiets(arraylist_t *move_list, uint64_t pawn_board,
 
         // generate move
         move_t move = encode_move(source_square, target_square, flags, 0U);
-        print_move(move);
 
         // add move to the move list
         push(move_list, &move);
@@ -36,13 +35,13 @@ static void add_quiet_promos(arraylist_t *move_list, uint64_t pawn_board, int of
 
     // generate moves
     move_t knight_prom = encode_move(source_square, target_square,
-                                     M_KNIGHT_PROM, 0U);
+                                     M_QUIET | M_KNIGHT_PROM, 0U);
     move_t queen_prom = encode_move(source_square, target_square,
-                                    M_QUEEN_PROM, 0U);
+                                    M_QUIET | M_QUEEN_PROM, 0U);
     move_t bishop_prom = encode_move(source_square, target_square,
-                                     M_BISHOP_PROM, 0U);
+                                     M_QUIET | M_BISHOP_PROM, 0U);
     move_t rook_prom = encode_move(source_square, target_square,
-                                   M_ROOK_PROM, 0U);
+                                   M_QUIET | M_ROOK_PROM, 0U);
 
 
     // adding moves to move list
