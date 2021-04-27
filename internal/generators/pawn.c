@@ -139,6 +139,16 @@ static void white_pawn_moves(board_t *board, arraylist_t *moves)
     add_captures(moves, right_captures & ~RANK_8, 7, board, M_CAPTURE);
     add_capture_promos(moves, left_capture_promos, 9, board, M_CAPTURE);
     add_capture_promos(moves, right_capture_promos, 7, board, M_CAPTURE);
+
+    // handling en-passant moves
+    unsigned int ep_square = get_ep_square(board);
+    if (ep_square != 0U) {
+      uint64_t left_ep_capture = circular_left_shift(pawns & ~FILE_H, 9) & (1ULL << ep_square);
+      uint64_t right_ep_capture = circular_left_shift(pawns & ~FILE_A, 7) & (1ULL << ep_square);
+
+      add_captures(moves, left_ep_capture, 9, board, M_CAPTURE | M_EP);
+      add_captures(moves, right_ep_capture, 7, board, M_CAPTURE | M_EP);
+    }
 }
 
 static void black_pawn_moves(board_t *board, arraylist_t *moves)
@@ -166,10 +176,20 @@ static void black_pawn_moves(board_t *board, arraylist_t *moves)
     add_captures(moves, right_captures & ~RANK_1, -7, board, M_CAPTURE);
     add_capture_promos(moves, left_capture_promos, -9, board, M_CAPTURE);
     add_capture_promos(moves, right_capture_promos, -7, board, M_CAPTURE);
+
+    // handling en-passant moves
+    unsigned int ep_square = get_ep_square(board);
+
+    if (ep_square != 0U) {
+      uint64_t left_ep_capture = circular_left_shift(pawns & ~FILE_A, 55) & (1ULL << ep_square);
+      uint64_t right_ep_capture = circular_left_shift(pawns & ~FILE_H, 57) & (1ULL << ep_square);
+
+      add_captures(moves, left_ep_capture, -9, board, M_CAPTURE | M_EP);
+      add_captures(moves, right_ep_capture, -7, board, M_CAPTURE | M_EP);
+    }
 }
 
 
-//NOTICE: CAPTURING THE KING IS NO LONGER A MOVE
 void add_pawn_moves(arraylist_t *moves, board_t *board, side_t side)
 {
     if (side == WHITE)
