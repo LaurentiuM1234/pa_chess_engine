@@ -127,4 +127,8 @@ void precompute_tables();
 // deletes lookup tables and hash tables
 void free_tables();
 
+
+unsigned int get_ep_square(board_t *board);
+void set_ep_square(board_t *board, unsigned int new);
+
 #endif

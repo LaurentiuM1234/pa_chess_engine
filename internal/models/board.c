@@ -7,6 +7,7 @@
 
 struct board {
     arraylist_t *_pieces;
+    unsigned int _ep_square;
 };
 
 
@@ -18,6 +19,7 @@ static board_t *alloc_board(void)
         return NULL;
 
     board->_pieces = create_list(sizeof(uint64_t));
+    board->_ep_square = 0U;
 
     if (!board->_pieces) {
         free(board);
@@ -143,4 +145,14 @@ void precompute_tables() {
 void free_tables() {
     free(knight_lookup_table);
     free_bishop_data();
+}
+
+unsigned int get_ep_square(board_t *board)
+{
+  return board->_ep_square;
+}
+
+void set_ep_square(board_t *board, unsigned int new)
+{
+  board->_ep_square = new;
 }
