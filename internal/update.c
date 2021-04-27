@@ -2,6 +2,8 @@
 #include "../util.h"
 #include "../debug/fatal.h"
 
+#define EP_DISPLACEMENT 16
+
 
 static int in_is_quiet(side_t side, uint64_t target_bitboard, int captured_piece, int moved_piece)
 {	
@@ -78,6 +80,7 @@ static int in_is_quiet_prom(side_t side, uint64_t target_bitboard, int captured_
             return 0;
     }
 }
+
 static int gen_is_prom(move_t flags)
 {
   if (flags & M_QUEEN_PROM || flags & M_ROOK_PROM|| flags & M_BISHOP_PROM || flags & M_KNIGHT_PROM)
@@ -118,6 +121,22 @@ static int gen_is_quiet_prom(move_t flags)
     return 0;
 }
 
+static void update_ep_square(board_t *board, uint64_t src_bitboard, side_t side,
+                             uint64_t target_bitboard, int moved_piece)
+{
+  // check to see if ep square can be updated
+  if (moved_piece == ALL_PAWNS) {
+    int displacement = abs((int)to_position(target_bitboard) - (int)to_position(src_bitboard));
+
+    if (displacement == EP_DISPLACEMENT) {
+      if (side == WHITE)
+        set_ep_square(board, to_position(src_bitboard) + 8);
+      else
+        set_ep_square(board, to_position(src_bitboard) - 8);
+    }
+  }
+}
+
 
 static void add_promoted_piece(board_t *board, uint64_t target_bitboard, move_t flags)
 {
@@ -151,6 +170,43 @@ static void update_quiet(board_t *board, side_t side,
     // updating bitboard for opposite side
     uint64_t side_bitboard = (src_bitboard | target_bitboard) ^ get_bitboard(board, side);
     update_bitboard(board, side, &side_bitboard);
+
+    // updating ep square if need be
+    update_ep_square(board, src_bitboard, side, target_bitboard, moved_piece);
+}
+
+static void update_ep_capture(board_t *board, side_t side, uint64_t src_bitboard,
+                              uint64_t target_bitboard, int moved_piece)
+{
+  uint64_t captured_bitboard = 0U;
+  uint64_t op_bitboard = 0U;
+
+  if (side == WHITE) {
+    captured_bitboard = (target_bitboard >> 8U) ^ get_bitboard(board, ALL_PAWNS);
+    op_bitboard = (target_bitboard >> 8U) ^ get_bitboard(board, !side);
+
+  } else {
+    captured_bitboard = (target_bitboard << 8U) ^ get_bitboard(board, ALL_PAWNS);
+    op_bitboard = (target_bitboard << 8U) ^ get_bitboard(board, !side);
+  }
+
+  // removing captured piece from its bitboard
+  update_bitboard(board, ALL_PAWNS, &captured_bitboard);
+
+  // removing captured piece from opponent's board
+  update_bitboard(board, !side, &op_bitboard);
+
+  // updating bitboard for moved piece
+  uint64_t moved_bitboard = (src_bitboard | target_bitboard) ^ get_bitboard(board, moved_piece);
+  update_bitboard(board, moved_piece, &moved_bitboard);
+
+  // updating side's bitboard
+  uint64_t side_bitboard = (src_bitboard | target_bitboard) ^ get_bitboard(board, side);
+  update_bitboard(board, side, &side_bitboard);
+
+  // updating board's ep square
+  set_ep_square(board, 0U);
+
 }
 
 static void update_capture(board_t *board, side_t side, uint64_t src_bitboard,
@@ -226,13 +282,23 @@ static void update_by_in(board_t *board, side_t side, move_t in_move)
     int captured_piece = to_piece(board, target);
     int moved_piece = to_piece(board, src);
 
+    if (target == get_ep_square(board) && moved_piece == ALL_PAWNS) {
+      // move is ep
+      update_ep_capture(board, side, src_bitboard, target_bitboard, moved_piece);
+      return;
+    }
+
+    // clearing ep square
+    set_ep_square(board, 0U);
+
     if (moved_piece == 0 || !(src_bitboard & get_bitboard(board, side)))
         FATAL_ERROR("Invalid move.");
 
     if (in_is_quiet(side, target_bitboard, captured_piece, moved_piece)) {
       update_quiet(board, side, src_bitboard, target_bitboard, moved_piece);
     } else if (in_is_capture(side, target_bitboard, captured_piece, moved_piece)) {
-      update_capture(board, side, src_bitboard, target_bitboard, moved_piece, captured_piece);
+        update_capture(board, side, src_bitboard,
+                       target_bitboard, moved_piece, captured_piece);
     } else if (in_is_prom_capture(side, target_bitboard, captured_piece, moved_piece)) {
       update_prom_capture(board, side, src_bitboard,
                           target_bitboard, moved_piece, captured_piece,
@@ -258,13 +324,22 @@ static void update_by_gen(board_t *board, side_t side, move_t gen_move)
     uint64_t target_bitboard = to_bitboard(target);
     int moved_piece = to_piece(board, src);
 
+    if ((flags & M_EP) && moved_piece == ALL_PAWNS) {
+      update_ep_capture(board, side, src_bitboard, target_bitboard, moved_piece);
+      return;
+    }
+
+    // clearing ep square
+    set_ep_square(board, 0U);
+
     if (moved_piece == 0 || !(src_bitboard & get_bitboard(board, side)))
         FATAL_ERROR("Invalid move.");
 
     if (gen_is_quiet(flags)) {
       update_quiet(board, side, src_bitboard, target_bitboard, moved_piece);
     } else if (gen_is_capture(flags)) {
-      update_capture(board, side, src_bitboard, target_bitboard, moved_piece, captured_piece);
+        update_capture(board, side, src_bitboard,
+                       target_bitboard, moved_piece, captured_piece);
     } else if (gen_is_prom_capture(flags)) {
       update_prom_capture(board, side, src_bitboard,
                           target_bitboard, moved_piece, captured_piece,
