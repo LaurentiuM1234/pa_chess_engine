@@ -282,8 +282,8 @@ static void update_by_in(board_t *board, side_t side, move_t in_move)
     int captured_piece = to_piece(board, target);
     int moved_piece = to_piece(board, src);
 
+    // check if move is en-passant and handle
     if (target == get_ep_square(board) && moved_piece == ALL_PAWNS) {
-      // move is ep
       update_ep_capture(board, side, src_bitboard, target_bitboard, moved_piece);
       return;
     }
@@ -324,6 +324,7 @@ static void update_by_gen(board_t *board, side_t side, move_t gen_move)
     uint64_t target_bitboard = to_bitboard(target);
     int moved_piece = to_piece(board, src);
 
+    // check if move is en-passant and handle
     if ((flags & M_EP) && moved_piece == ALL_PAWNS) {
       update_ep_capture(board, side, src_bitboard, target_bitboard, moved_piece);
       return;
