@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "board.h"
 #include "../containers/arraylist.h"
@@ -7,6 +8,8 @@
 
 struct board {
     arraylist_t *_pieces;
+    uint64_t _check_board;
+    unsigned int _ep_square;
 };
 
 
@@ -18,6 +21,8 @@ static board_t *alloc_board(void)
         return NULL;
 
     board->_pieces = create_list(sizeof(uint64_t));
+    board->_ep_square = 0U;
+    board->_check_board = 0U;
 
     if (!board->_pieces) {
         free(board);
@@ -98,6 +103,12 @@ uint64_t get_bishops(board_t *board, side_t side)
            *(uint64_t*)get(board->_pieces, side);
 }
 
+uint64_t get_queen(board_t *board, side_t side)
+{
+    return *(uint64_t*)get(board->_pieces, ALL_QUEENS)
+           & *(uint64_t*)get(board->_pieces, side);
+}
+
 uint64_t get_king(board_t *board, side_t side)
 {
     return *(uint64_t*)get(board->_pieces, ALL_KINGS)
@@ -131,6 +142,9 @@ void clear_board(board_t *board)
     // cleaning the array list
     flush(board->_pieces);
 
+    // clearning the check board
+    board->_check_board = 0U;
+
     // initializing the array list
     init_pieces(board->_pieces);
 }
@@ -143,4 +157,35 @@ void precompute_tables() {
 void free_tables() {
     free(knight_lookup_table);
     free_bishop_data();
+}
+
+unsigned int get_ep_square(board_t *board)
+{
+  return board->_ep_square;
+}
+
+void set_ep_square(board_t *board, unsigned int new)
+{
+  board->_ep_square = new;
+}
+
+void update_check_board(board_t *board, uint64_t new)
+{
+  board->_check_board = new;
+}
+
+uint64_t get_check_board(board_t *board)
+{
+  return board->_check_board;
+}
+
+void board_copy(board_t *dest, board_t *src)
+{
+  dest->_check_board = src->_check_board;
+  dest->_ep_square = src->_ep_square;
+
+  for (int i = 0; i < 8; i++) {
+    uint64_t crt_board = get_bitboard(src, i);
+    update_bitboard(dest, i, &crt_board);
+  }
 }

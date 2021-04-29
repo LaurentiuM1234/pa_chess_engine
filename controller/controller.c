@@ -40,7 +40,8 @@ void destroy_controller(controller_t **controller)
 static void read_input(char *buffer, int buffer_size)
 {
     // reading input from stdin
-    fgets(buffer, buffer_size, stdin);
+    if (fgets(buffer, buffer_size, stdin) == NULL)
+      FATAL_ERROR("Failed to read input. Reached EOF.");
 
     // removing trailing newline
     buffer[strlen(buffer) - 1] = '\0';
@@ -58,7 +59,7 @@ void clear_flag(controller_t *controller, unsigned int position)
 
 int is_set(controller_t *controller, unsigned int position)
 {
-    return (controller->_flags & (1U << position)) >> position;
+    return (int)((controller->_flags & (1U << position)) >> position);
 }
 
 void toggle_flag(controller_t *controller, unsigned int position)

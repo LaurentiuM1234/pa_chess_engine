@@ -65,4 +65,11 @@ uint64_t generate_magic_number();
 
 uint64_t get_bit(uint64_t n, int pos);
 
+/*
+ * Check if given move (string) is a promotion
+ * @params: buffer -> given string
+ * @returns: 1 if given move is promotion, 0 otherwise
+ */
+int is_promotion(char *buffer);
+
 #endif

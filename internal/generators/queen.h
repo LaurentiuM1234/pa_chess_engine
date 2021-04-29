@@ -2,17 +2,14 @@
 #include "../../util.h"
 #include "../containers/arraylist.h"
 
-uint64_t* knight_lookup_table;
-
 /*
- * Generate all possible knight moves for current board's state and side and
+ * Generate all possible queen moves for current board's state and side and
  * put them in a given arraylist object.
  * @params: moves -> pointer to an arraylist object
  *          board -> pointer to a board object
  *          side -> side for which the generation is done
- *			lookup_table -> contains knight moves for each square possible
  * @returns: no return
  */
-void add_knight_moves(arraylist_t *moves, board_t *board, side_t side);
+void add_queen_moves(arraylist_t *moves, board_t *board, side_t side);
 
-uint64_t knight_attack_board(board_t* board, unsigned int position);
+uint64_t queen_attack_board(board_t* board, unsigned int position);

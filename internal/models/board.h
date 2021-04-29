@@ -79,6 +79,14 @@ uint64_t get_knights(board_t *board, side_t side);
 uint64_t get_bishops(board_t *board, side_t side);
 
 /*
+ * Retrieve the queen bitboard for a given side
+ * @params: board -> pointer to a board object
+ *          side -> side for which the retrieval is done
+ * @returns: the queen bitboard for given side
+ */
+uint64_t get_queen(board_t *board, side_t side);
+
+/*
  * Retrieve the kings bitboard for a given side
  * @params: board -> pointer to a board object
  *          side -> side for which the retrieval is done
@@ -127,4 +135,41 @@ void precompute_tables();
 // deletes lookup tables and hash tables
 void free_tables();
 
+/*
+ * Retrieve the value of the en-passant square.
+ * @params: board -> pointer to board object
+ * @returns: value of the en-passant square
+ */
+unsigned int get_ep_square(board_t *board);
+
+/*
+ * Set the value of the en-passant square.
+ * @params: board -> pointer to board object
+ *          new -> new value of the en-passant square
+ * @returns: no return
+ */
+void set_ep_square(board_t *board, unsigned int new);
+
+/*
+ * Update the value of the check board.
+ * @params: board -> pointer to board object
+ *          new -> new value of the check board
+ * @returns: no return
+ */
+void update_check_board(board_t *board, uint64_t new);
+
+/*
+ * Retrieve the value of the check board.
+ * @params: board -> pointer to board object
+ * @returns: value of the check board
+ */
+uint64_t get_check_board(board_t *board);
+
+/*
+ * Copy contents of src to dest.
+ * @params: dest -> pointer to destination board object
+ *          src -> pointer to source board object
+ * @returns: no return
+ */
+void board_copy(board_t *dest, board_t *src);
 #endif
