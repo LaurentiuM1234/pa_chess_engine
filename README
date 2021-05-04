@@ -1,9 +1,8 @@
 =============================IMPORTANT NOTES===============================
--> currently, engine does not support castling moves from XBoard and it does
-not detect whether the king is in check(it will try to send a move after
-the king gets in check position and then it will stop working properly)
--> the engine can only move pawns and it will resign if there's no pawn moves
-left to generate
+-> currently, engine does not detect whether the king is in 
+check(it will try to send a move after the king gets in check position and then 
+it will stop working properly)
+-> the engine will resign when no more moves are possible
 ===========================================================================
 
 ==============================COMPILATION===================================
@@ -137,7 +136,27 @@ logic.
                          - we actually tried the lookup table version and generating all
                          possible moves for the initial positions of the pawns was 6 times
                          slower than our current implementation.
-
+(*)rook move generation: - the functions used find all the paths (going north, south, west and east)
+                         a certain rook can go through; this process is repeated for both rooks
+                         (if they are both alive)
+                         Complexity : O(r + f), where r is the number of ranks (8) and
+                         f is the number of files (8). So, in conclusion, it is
+                         O(16) = O(1)
+                         - unlike the bishops, the rook move finding algorithm was not
+                         done using magic bitboards, due to time constraints. (maybe)
+(*)castling: - castling was done by using a series of flags:
+             2 for each rook (to check if they moved)
+             1 for if the king is in check
+             1 for if the king already moved this game
+             these flags are saved on an 8 bit value
+             (4 bits for the white player, 4 bits for the black player)
+             - if all of the flags are in accordance to the rules of castling,
+             then there are only 2 possible moves: king-side castling and
+             queen-side castling
+             - the algorithm also checks if the path the king takes does not go through or
+             end up in a check position
+             -these moves are checked by looking up existing internal bitboards,
+             thus the time complexity is constant (O(1))
 (*)move selection: - @select_move does a linear traversal through all available moves
                    in a given arraylist which has a time complexity of O(n), n = number
                    of available moves
