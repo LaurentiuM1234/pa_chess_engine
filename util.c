@@ -44,7 +44,7 @@ static int is_normal(char *buffer)
   return is_valid(buffer);
 }
 
-static int is_promotion(char *buffer)
+int is_promotion(char *buffer)
 {
   if (strlen(buffer) != SAN0_PROMOTION)
     return 0;

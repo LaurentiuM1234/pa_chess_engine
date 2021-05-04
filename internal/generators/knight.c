@@ -53,7 +53,10 @@ static void get_each_knight(board_t *board, side_t side, uint64_t* k1, uint64_t*
     *k2 = knights & (~(*k1));
 }
 
-// DOESN'T TAKE INTO ACCOUNT LEAVING THE KING IN CHECK (SO FAR)
+uint64_t knight_attack_set(board_t* board, side_t side, uint64_t bitboard) {
+    return knight_lookup_table[to_position(bitboard)] & (~get_side(board, side));
+}
+
 // STORE THE MOVES INTO AN ARRAY
 // returns an array of moves if there exists at least one possible move
 // returns NULL if no moves are possible
@@ -63,7 +66,7 @@ static arraylist_t* generate_knight_moves(board_t *board, side_t side, uint64_t 
         return NULL;
     }
 
-    uint64_t move_bitboard = lookup_table[to_position(knight_bitboard)] & (~get_side(board, side));
+    uint64_t move_bitboard = knight_attack_set(board, side, knight_bitboard);
 
     arraylist_t* moves = create_list(sizeof(uint64_t));
     if(!moves) {
@@ -73,7 +76,6 @@ static arraylist_t* generate_knight_moves(board_t *board, side_t side, uint64_t 
     for(int i = 0; i < 64; i++) {
         uint64_t move = circular_left_shift(1, i);
         if (move & move_bitboard) {
-            //TODO: ALSO CHECK IF THE MOVE LEAVES THE KING IN CHECK
             push(moves, &move);
         }
     }
@@ -88,7 +90,6 @@ static void add_quiet(arraylist_t *moves, board_t *board, side_t side, uint64_t 
 
     // generate move
     move_t encoded_move = encode_move(source_square, target_square, M_QUIET, 0U);
-    print_move(encoded_move);
 
     // add move to the move list
     push(moves, &encoded_move);
@@ -160,4 +161,28 @@ void add_knight_moves(arraylist_t *moves, board_t *board, side_t side) {
         push_moves(moves, board, side, k2, move_list);
         destroy_list(&move_list);
     }
+}
+
+static uint64_t side_knights_attack_board(board_t* board, side_t side, unsigned int position) {
+    uint64_t bitboard = to_bitboard(position);
+    uint64_t k1 = 0;
+    uint64_t k2 = 0;
+    get_each_knight(board, side, &k1, &k2);
+
+    uint64_t attack_board = 0;
+
+    if (k1 != 0 && (knight_attack_set(board, side, k1) & bitboard)) {
+        attack_board |= k1;
+    }
+
+    if (k2 != 0 && (knight_attack_set(board, side, k2) & bitboard)) {
+        attack_board |= k2;
+    }
+
+    return attack_board;
+}
+
+uint64_t knight_attack_board(board_t* board, unsigned int position) {
+    return side_knights_attack_board(board, WHITE, position) |
+        side_knights_attack_board(board, BLACK, position);
 }

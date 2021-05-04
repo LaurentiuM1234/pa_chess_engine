@@ -12,3 +12,5 @@
  * @returns: no return
  */
 void add_bishop_moves(arraylist_t *moves, board_t *board, side_t side);
+
+uint64_t bishop_attack_board(board_t* board, unsigned int position);

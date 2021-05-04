@@ -1,0 +1,188 @@
+locale = LC_CTYPE=en_US.UTF-8;LC_NUMERIC=ro_RO.UTF-8;LC_TIME=ro_RO.UTF-8;LC_COLLATE=en_US.UTF-8;LC_MONETARY=ro_RO.UTF-8;LC_MESSAGES=en_US.UTF-8;LC_PAPER=ro_RO.UTF-8;LC_NAME=ro_RO.UTF-8;LC_ADDRESS=ro_RO.UTF-8;LC_TELEPHONE=ro_RO.UTF-8;LC_MEASUREMENT=ro_RO.UTF-8;LC_IDENTIFICATION=ro_RO.UTF-8
+recognized 'normal' (-1) as variant normal
+recognized 'normal' (-1) as variant normal
+recognized 'normal' (-1) as variant normal
+shuffleOpenings = 0
+shuffleOpenings = 0
+Version: xboard 4.9.1 + fairymax ()
+Reset(1, 0) from gameMode 0
+recognized 'normal' (-1) as variant normal
+GameEnds(0, (null), 2)
+shuffleOpenings = 0
+StartChildProcess (dir=".") fairymax
+171 >first : xboard
+protover 2
+245 <first : tellics say     Fairy-Max 5.0b
+245 <first : tellics say     by H.G. Muller
+245 <first : feature myname="Fairy-Max 5.0b"
+245 >first : accepted myname
+245 <first : feature memory=1 exclude=1
+245 >first : accepted memory
+245 >first : accepted exclude
+245 <first : feature setboard=0 xedit=1 ping=1 done=0
+245 >first : accepted setboard
+245 >first : accepted xedit
+245 >first : accepted ping
+245 >first : accepted done
+245 <first : feature variants="normal,nocastle,shatranj,asean,makruk,cambodian,ai-wok,courier,knightmate,capablanca,gothic,janus,falcon,cylinder,berolina,super,seirawan,spartan,great,light-brigade,king-of-the-hill,bifurcator,team-mate,los-alamos,ciccolini,mexican,grande-acedrex,roman,almost-wildebeest,fairy"
+245 >first : accepted variants
+245 <first : feature option="Resign -check 0"
+245 >first : accepted option
+245 <first : feature option="Resign Threshold -spin 800 200 1200"
+245 >first : accepted option
+245 <first : feature option="Claim draw after -spin 50 0 200"
+245 >first : accepted option
+245 <first : feature option="Ini File -file /usr/share/games/fairymax/fmax.ini"
+245 >first : accepted option
+245 <first : feature option="Multi-PV Margin -spin 0 0 1000"
+245 >first : accepted option
+245 <first : feature option="Variant fairy selects -combo FIDE-Clobberers /// Clobberers-FIDE /// FIDE-Nutters /// Nutters-FIDE /// Clobberers-Nutters /// Nutters-Clobberers /// FIDE-Rookies /// Rookies-FIDE /// Clobberers-Rookies /// Rookies-Clobberers /// Nutters-Rookies /// Rookies-Nutters"
+245 >first : accepted option
+245 <first : feature option="Makruk rules -combo makruk /// Cambodian /// Ai-wok"
+245 >first : accepted option
+245 <first : feature option="Dummy Slider Example -slider 20 0 100"
+245 >first : accepted option
+245 <first : feature option="Dummy String Example -string happy birthday!"
+245 >first : accepted option
+245 <first : feature option="Dummy Path Example -path ."
+245 >first : accepted option
+246 <first : feature option="Automatic persistent-hash dialog -check 0"
+246 >first : accepted option
+246 <first : feature option="Info -button"
+246 >first : accepted option
+246 <first : feature option="Save in hash file -button"
+246 >first : accepted option
+246 <first : feature option="Clear Hash -button"
+246 >first : accepted option
+246 <first : feature done=1
+246 >first : accepted done
+247 >first : memory 68
+247 >first : new
+random
+247 >first : level 40 5 0
+247 >first : post
+247 >first : hard
+247 >first : ping 1
+279 <first : pong 1
+nps: w=-1, b=-1
+nps: w=-1, b=-1
+2509 >first : time 30000
+2509 >first : otim 30000
+book hit = (NULL)
+2510 >first : g1f3
+2518 <first : # times @ 941687409
+2518 <first : # 16+16 pieces, centr = (1,1) R=40
+2518 <first :  1     15        0          3 c7c5
+2518 <first :  1     16        0          9 e7e6
+2518 <first :  1     28        0         11 f7f5
+2518 <first :  2     14        0         19 f7f5 c2c4
+2518 <first :  3     16        0        330 f7f5 c2c4 c7c5
+2518 <first :  4    -10        0        899 f7f5 d2d4 b8c6 c2c4
+2518 <first :  4     -3        0       1702 f7f6 d2d4 b8c6 c2c4
+2518 <first :  4      0        0       5231 a7a6 d2d4 d7d5 b1c3
+2519 <first :  4      3        0       6677 d7d5 d2d4 b8c6 b1c3
+2536 <first :  5     22        2      20387 d7d5 d2d4 b8c6 b1c3 c8f5
+2569 <first :  6      2        5      42364 d7d5 d2d4 b8c6 b1c3 c8f5 c1f4
+2613 <first :  6     14       10     100977 b8c6 d2d4 f7f5 c2c4 g8f6
+2679 <first :  7      0       16     183414 b8c6 d2d4 g8f6 b1c3 d7d5 c1f4 c8f5
+2823 <first :  7     13       31     369231 b8a6 d2d4 c7c6 c2c4 d7d5 b1d2 c8f5
+3239 <first :  8    -22       72     903554 b8a6 d2d4 c7c6 c2c3 d7d5 c1f4 c8f5 b1d2
+3572 <first :  8      5      106    1223071 b8c6 d2d4 g8f6 c2c3 d7d6 c1g5 c8f5 b1d2
+4112 <first :  8     10      160    1848492 c7c6 d2d4 g8f6 c2c3 d7d6 c1e3
+5781 <first :  9     14      327    3522496 c7c6 d2d4 d7d5 c1f4 c8e6 b1d2 b8d7 c2c3 g8f6
+9460 <first :  9     16      694    8040554 f7f6 c2c4 c7c5 d2d4 c5d4
+11571 <first : # times @ 941696470: real=9061 cpu=8020
+11571 <first : # promo = 0 (`) GT = 0
+11571 <first : move f7f6
+Interrupting first
+26198 >first : time 29093
+26198 >first : otim 28537
+book hit = (NULL)
+26198 >first : g2g3
+26207 <first : # times @ 941711097
+26207 <first : # 16+16 pieces, centr = (1,1) R=40
+26207 <first :  1     14        0          3 c7c5
+26207 <first :  1     19        0          5 b8c6
+26207 <first :  2      7        0         13 b8c6 c2c4
+26207 <first :  2     14        0         34 a7a5
+26207 <first :  3     14        0        113 a7a5
+26207 <first :  3     26        0        303 c7c5 c2c4 b8c6
+26207 <first :  4     -3        0       1017 c7c5 d2d4 c5d4 f3d4
+26207 <first :  4     14        0       3086 a7a5
+26207 <first :  5    -19        0       5234 a7a5 d2d4 b8c6 c2c4 d7d5
+26209 <first :  5      5        1       7846 a7a6 d2d4 b8c6 c2c4 b7b5
+26226 <first :  5     19        2      21113 d7d5 d2d4 b8c6 b1c3 c8f5
+26247 <first :  6     -7        4      35160 d7d5 d2d4 b8c6 b1c3 c8f5 c1f4
+26283 <first :  6      2        8      76860 g7g5 c2c4 g5g4 f3h4 d7d5 b2b3
+26398 <first :  7    -19       20     218447 g7g5 d2d4 g5g4 f3d2 b8c6 c2c3 a7a5
+26519 <first :  7      0       32     374489 h7h5 c2c4 c7c5 b1c3 b8c6 d2d4 b7b6
+26634 <first :  7      3       43     510411 b8a6 d2d4 c7c6 c2c4 d7d5 b1d2 c8f5
+26674 <first :  7      8       47     561730 b8c6 d2d4 a7a5 b1c3 d7d5 c1f4 c8f5
+26772 <first :  7     15       57     691917 c7c5 c2c3 b8c6 d2d4 d8b6 h2h4 d7d5
+27067 <first :  8     -9       86    1068307 c7c5 c2c3 b8c6 f1g2 d7d5 e1g1 c8f5 d2d4
+27197 <first :  8     -3       99    1239014 c7c6 f1g2 d7d5 e1g1 c8f5 f3d4 f5e4 g2e4
+27676 <first :  8      0      147    1864213 d7d5 d2d3 c7c5 c1e3 b8d7 c2c4 d5c4 d3c4
+28924 <first :  9     -7      272    3517446 d7d5 d2d4 c7c6 f1g2 c8f5 e1g1 b8d7 b1c3 g7g5
+30196 <first :  9     -5      399    5171765 d7d6 d2d4 c7c6 c2c4 c8f5 b1c3 b8d7 c1f4 g7g5
+33430 <first :  9      1      723    9220155 b8c6 f1g2 d7d5 e1g1 e7e5 d2d4 g8e7 b1c3 c8f5
+34020 <first : # times @ 941718919: real=7822 cpu=7580
+34020 <first : # promo = 0 (`) GT = 0
+34020 <first : move b8c6
+Interrupting first
+35270 >first : time 28311
+35270 >first : otim 28412
+book hit = (NULL)
+35270 >first : f1g2
+35277 <first : # times @ 941720169
+35277 <first : # 16+16 pieces, centr = (1,1) R=40
+35277 <first :  1      6        0          3 a7a5
+35277 <first :  2    -20        0          7 a7a5 c2c4
+35277 <first :  2     -7        0         40 b7b6 c2c4
+35277 <first :  2      0        0         40 d7d5
+35277 <first :  3      0        0         46 d7d5
+35277 <first :  4      0        0        168 d7d5
+35277 <first :  5      0        0        317 d7d5
+35277 <first :  6     -1        0       1322 d7d5
+35288 <first :  7     -1        1      14997 d7d5
+35508 <first :  8    -21       23     256504 d7d5 e1g1 c8f5 b1c3 d8d7 f3h4 d5d4 c3e4
+36872 <first :  9    -17      160    1972822 d7d5 e1g1 c8f5 b1c3 d5d4 c3b5 a7a6 f3h4 f5e6
+38244 <first :  9    -12      297    3747459 e7e5 e1g1 f8e7 b1c3 d7d5 d2d3 c8e6 c1e3 a7a5
+39730 <first : # times @ 941724629: real=4460 cpu=4370
+39730 <first : # promo = 0 (`) GT = 0
+39730 <first : move e7e5
+Interrupting first
+40886 >first : time 27865
+40886 >first : otim 28296
+book hit = (NULL)
+40886 >first : e1g1
+40893 <first : # times @ 941725785
+40893 <first : # 16+16 pieces, centr = (1,1) R=40
+40893 <first :  1      6        0         15 a7a5
+40893 <first :  1      7        0         25 f8e7
+40893 <first :  1     10        0         35 f8d6
+40893 <first :  2     -5        0         73 f8d6 c2c4
+40893 <first :  2     -4        0        942 e5e4 f3h4
+40893 <first :  3      2        0       1198 e5e4 f3h4 d7d5
+40893 <first :  3      5        0       1580 f8d6 c2c4 g8e7
+40893 <first :  3      6        0       1909 d7d5 d2d4 c8f5
+40893 <first :  4     -9        0       4101 d7d5 d2d4 c8f5 b1c3
+40906 <first :  4     -8        2      14661 f8d6 c2c4 e5e4 f3h4
+40940 <first :  5     -1        5      37528 f8d6 b1c3 g8e7 c3e4 e8g8 e4d6 c7d6
+40946 <first :  5      1        6      45387 g8e7 c2c4 d7d5 d1b3 d8d6 c4d5 e7d5 f3e5 d6e5 g2d5 e5e2
+40981 <first :  6    -12        9      86684 g8e7 b1c3 d7d5 d2d4 c8f5
+41039 <first :  6     -6       15     159128 g8h6 b1c3 f8d6 c3e4 e8g8 e4d6
+41166 <first :  6     -3       28     311031 f8d6 d2d4 g8e7 d4d5 c6b4 c2c4
+41299 <first :  7      0       41     459182 f8d6 d2d4 g8h6 b1a3 e8g8 a3c4
+41676 <first :  8    -11       79     836456 f8d6 b1c3 g8h6 c3e4 d6e7 c2c4 e8g8 d2d4
+42158 <first :  8     -8      127    1342454 f8e7 b1c3 g8h6 c3d5 e7c5 c2c4 e8g8 d2d3
+44712 <first : # times @ 941729611: real=3826 cpu=3030
+44712 <first : # promo = 0 (`) GT = 0
+44712 <first : move f8e7
+ForwardInner(9), current 8, forward 8
+ForwardInner(9), current 8, forward 8
+GameEnds(29, xboard exit, 2)
+Interrupting first
+52391 >first : result * {xboard exit}
+52391 >first : force
+52391 >first : ping 2
+52391 >first : quit

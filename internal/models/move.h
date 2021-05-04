@@ -7,7 +7,12 @@
 #define M_QUIET 1U
 #define M_DOUBLE_PUSH 2U
 #define M_CAPTURE 4U
-#define M_QUEEN_PROM 8U
+#define M_KNIGHT_PROM 8U
+#define M_ROOK_PROM 16U
+#define M_BISHOP_PROM 32U
+#define M_QUEEN_PROM 64U
+#define M_EP 128U
+#define M_CASTLE 256U
 /*=================================*/
 
 /*===========DECODE KEYS===========*/

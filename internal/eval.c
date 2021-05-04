@@ -3,11 +3,11 @@
 
 int eval_pawns(move_t move)
 {
-    return decode_move(move, M_FLAGS) + decode_move(move, M_PIECE);
+    return (int)(decode_move(move, M_FLAGS) + decode_move(move, M_PIECE));
 }
 
 int eval_knight(move_t move) {
-    return decode_move(move, M_FLAGS) + decode_move(move, M_PIECE);
+    return (int)(decode_move(move, M_FLAGS) + decode_move(move, M_PIECE));
 }
 
 move_t select_move(arraylist_t* moves, eval_t move_evaluator)

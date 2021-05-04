@@ -1,0 +1,32 @@
+locale = LC_CTYPE=en_US.UTF-8;LC_NUMERIC=ro_RO.UTF-8;LC_TIME=ro_RO.UTF-8;LC_COLLATE=en_US.UTF-8;LC_MONETARY=ro_RO.UTF-8;LC_MESSAGES=en_US.UTF-8;LC_PAPER=ro_RO.UTF-8;LC_NAME=ro_RO.UTF-8;LC_ADDRESS=ro_RO.UTF-8;LC_TELEPHONE=ro_RO.UTF-8;LC_MEASUREMENT=ro_RO.UTF-8;LC_IDENTIFICATION=ro_RO.UTF-8
+recognized 'normal' (-1) as variant normal
+recognized 'normal' (-1) as variant normal
+recognized 'normal' (-1) as variant normal
+shuffleOpenings = 0
+shuffleOpenings = 0
+Version: xboard 4.9.1 + make ()
+Reset(1, 0) from gameMode 0
+recognized 'normal' (-1) as variant normal
+GameEnds(0, (null), 2)
+shuffleOpenings = 0
+StartChildProcess (dir=".") make run
+196 >first : xboard
+protover 2
+199 <first : ./program
+203 <first : feature done=0
+204 >first : accepted done
+204 <first : feature sigint=0 san=0 myname="SURPY SOFTISTU CHESS ENGINE"
+204 >first : accepted sigint
+204 >first : accepted san
+204 >first : accepted myname
+204 <first : feature done=1
+204 >first : accepted done
+206 >first : new
+random
+206 >first : level 40 5 0
+206 >first : post
+206 >first : hard
+GameEnds(29, xboard exit, 2)
+29937 >first : result * {xboard exit}
+29937 >first : force
+29937 >first : quit

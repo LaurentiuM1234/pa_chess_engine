@@ -1,6 +1,5 @@
 #include "bishop.h"
 #include <stdlib.h>
-#include <string.h>
 
 // bishop magic numbers brute-force generated
 // bishop magic[i] is the magic number for square 'i'
@@ -375,10 +374,10 @@ void free_bishop_data() {
     free_hash_table();
 }
 
-uint64_t get_attack_set(board_t* board, uint64_t bishop_bitboard) {
+uint64_t get_attack_set_bishop(board_t* board, side_t side, uint64_t bishop_bitboard) {
     int position = to_position(bishop_bitboard);
     uint64_t mask = get_masked_blockers(board, bishop_bitboard);
-    return bishop_hash_table[position][generate_key(position, mask)];
+    return bishop_hash_table[position][generate_key(position, mask)] & (~get_side(board, side));
 }
 
 static void add_quiet(arraylist_t *moves, board_t *board, side_t side, uint64_t bishop_bitboard, uint64_t move) {
@@ -387,7 +386,6 @@ static void add_quiet(arraylist_t *moves, board_t *board, side_t side, uint64_t 
 
     // generate move
     move_t encoded_move = encode_move(source_square, target_square, M_QUIET, 0U);
-    print_move(encoded_move);
 
     // add move to the move list
     push(moves, &encoded_move);
@@ -410,7 +408,6 @@ void add_bishop_moves(arraylist_t* moves, board_t* board, side_t side) {
     get_each_bishop(board, side, &b1, &b2);
     uint64_t bishop_list[2]; bishop_list[0] = b1; bishop_list[1] = b2;
 
-
     uint64_t enemies;
     if(side == WHITE) {
         enemies = get_side(board, BLACK);
@@ -423,12 +420,12 @@ void add_bishop_moves(arraylist_t* moves, board_t* board, side_t side) {
             continue; // current bishop is dead
         }
 
-        uint64_t attack_set = get_attack_set(board, bishop_list[i]) & (~get_side(board, side));
+        //uint64_t attack_set = get_attack_set_bishop(board, bishop_list[i]) & (~get_side(board, side));
+        uint64_t attack_set = get_attack_set_bishop(board, side, bishop_list[i]);
 
         for (int j = 0; j < 64; j++) {
             uint64_t move = circular_left_shift(1, j);
 
-            // TODO: ALSO CHECK IF IT LEAVES THE KING IN CHECK
             if (move & attack_set) {
                 if (move & enemies) {
                     add_capture(moves, board, side, bishop_list[i], move);
@@ -438,4 +435,28 @@ void add_bishop_moves(arraylist_t* moves, board_t* board, side_t side) {
             }
         }
     }
+}
+
+static uint64_t side_bishops_attack_board(board_t* board, side_t side, unsigned int position) {
+    uint64_t bitboard = to_bitboard(position);
+    uint64_t b1 = 0;
+    uint64_t b2 = 0;
+    get_each_bishop(board, side, &b1, &b2);
+
+    uint64_t attack_board = 0;
+   
+    if (b1 != 0 && (get_attack_set_bishop(board, side, b1) & bitboard)) {
+        attack_board |= b1;
+    }
+
+    if (b2 != 0 && (get_attack_set_bishop(board, side, b2) & bitboard)) {
+        attack_board |= b2;
+    }
+
+    return attack_board;
+}
+
+uint64_t bishop_attack_board(board_t* board, unsigned int position) {
+    return side_bishops_attack_board(board, WHITE, position) |
+        side_bishops_attack_board(board, BLACK, position);
 }
