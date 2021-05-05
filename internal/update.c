@@ -180,14 +180,8 @@ static void add_promoted_piece(board_t *board, uint64_t target_bitboard, move_t 
 static void update_quiet(board_t *board, side_t side,
                          uint64_t src_bitboard, uint64_t target_bitboard, int moved_piece)
 {
-    printf("side %d\n", side);
-    print_bitboard(get_rooks(board, side));
-    printf("%ld\n", get_rooks(board, side));
     // updating bitboard for moved piece
     uint64_t quiet_bitboard = (src_bitboard | target_bitboard) ^ get_bitboard(board, moved_piece);
-
-    printf("quiet_bitboard:\n");
-    print_bitboard(quiet_bitboard);
 
     update_bitboard(board, moved_piece, &quiet_bitboard);
 
@@ -212,7 +206,6 @@ static void update_quiet(board_t *board, side_t side,
 
       if (target_bitboard == (src_bitboard << 2)) {
         // king-side castling
-        // printf("king-side castling\n");
 
         if (side == WHITE) {
           qb_cs = (WHITE_INITIAL_RR | WHITE_INITIAL_RR >> 2) ^ get_bitboard(board, ALL_ROOKS);
@@ -230,7 +223,6 @@ static void update_quiet(board_t *board, side_t side,
 
       } else if (target_bitboard == (src_bitboard >> 2)) {
         //queen-side castling
-        // printf("queen-side castling\n");
 
         if (side == WHITE) {
           qb_cs = (WHITE_INITIAL_LR | WHITE_INITIAL_LR << 3) ^ get_bitboard(board, ALL_ROOKS);

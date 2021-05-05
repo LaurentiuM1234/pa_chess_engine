@@ -3,17 +3,16 @@
 
 #include "models/move.h"
 #include "containers/arraylist.h"
+#include "models/board.h"
 
-typedef int (*eval_t)(move_t);
+typedef int (*eval_t)(board_t*, move_t);
 
 /*
  * Utility function used to compute the score of a pawn move.
  * @params: move -> given move for which the score is computed
  * @returns: the computed score
  */
-int eval_pawns(move_t move);
-
-int eval_knights(move_t move);
+int eval(board_t *board, move_t move);
 
 
 /*
@@ -23,6 +22,6 @@ int eval_knights(move_t move);
  *          score of a move
  * @returns: the move with the highest score
  */
-move_t select_move(arraylist_t* moves, eval_t move_evaluator);
+move_t select_move(board_t *board, arraylist_t* moves, eval_t move_evaluator);
 
 #endif

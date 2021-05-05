@@ -32,7 +32,7 @@ void do_internal_logic(controller_t *controller, board_t *board)
                 set_flag(controller, C_RESIGN);
                 return;
             }
-            move_t best_move = select_move(available_moves, eval_pawns);
+            move_t best_move = select_move(board, available_moves, eval);
 
             // updating board
             update(board, is_set(controller, C_ES), 0U, best_move);
