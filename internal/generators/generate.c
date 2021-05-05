@@ -59,7 +59,7 @@ uint64_t compute_check_board(board_t *board, side_t side)
 
   uint64_t all_pieces_check_board = pawn_check_board | rook_check_board
       | bishop_check_board | knight_check_board
-      | queen_check_board | king_check_board;
+      | queen_check_board | king_check_board | rook_check_board;
 
   uint64_t side_check_board = all_pieces_check_board
       & get_bitboard(board, !side);
