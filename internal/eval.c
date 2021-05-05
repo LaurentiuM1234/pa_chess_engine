@@ -6,7 +6,7 @@ int eval(board_t *board, move_t move)
     if (to_piece(board, decode_move(move, M_SRC)) == ALL_KINGS) {
         if ((decode_move(move, M_SRC) == decode_move(move, M_TARGET) + 2) ||
             (decode_move(move, M_SRC) == decode_move(move, M_TARGET) - 2))
-                return 2147483647; //max score for castling
+                return INT32_MAX; //max score for castling
     }
 
     return (int)(decode_move(move, M_FLAGS) + decode_move(move, M_PIECE));
