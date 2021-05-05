@@ -164,6 +164,11 @@ logic.
                    available moves in order to find the one with the highest score
 
 (*)board update: - the board updating process is done in constant time
+(*)move filtering: - @filter_moves does a linear traversal through all available moves
+                   in a given arraylist, makes a move, checks if the king will be in
+                   check after making that move and adds it to a new arraylist if
+                   the answer is no; this has a time complexity of O(n), n = number of
+                   available moves
 =================================================================================
 
 ================================SOURCES==========================================
