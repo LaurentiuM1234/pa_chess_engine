@@ -51,7 +51,7 @@ uint64_t compute_check_board(board_t *board, side_t side)
   // defining variables for each of the check boards
   // TODO: compute check boards for rooks
   uint64_t pawn_check_board = pawn_attack_board(board, king_position);
-  uint64_t rook_check_board = 0U;
+  uint64_t rook_check_board = rook_attack_board(board, king_position);
   uint64_t bishop_check_board = bishop_attack_board(board, king_position);
   uint64_t knight_check_board = knight_attack_board(board, king_position);
   uint64_t queen_check_board = queen_attack_board(board, king_position);
