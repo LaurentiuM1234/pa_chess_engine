@@ -187,10 +187,12 @@ https://essays.jwatzman.org/essays/chess-move-generation-with-magic-bitboards.ht
 =================================================================================
 
 ================================RESPONSIBILITIES=================================
-COMAN Robert-Alexandru -> all controller-related work
+COMAN Robert-Alexandru -> all controller-related work, bishop, queen and knight
+move generation, move filtering
 VRABIE-DINU DARIAN -> board representation, move representation, move evaluation
-@logic module
-MIHALCEA Laurentiu-Cristian -> move generation, board update, @containers
+@logic module, rook, king and queen move generation, move filtering
+MIHALCEA Laurentiu-Cristian -> board update, @containers, pawn and king move
+generation, move filtering
 =================================================================================
 
 
