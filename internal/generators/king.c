@@ -59,15 +59,15 @@ uint64_t compute_castling_moves(board_t* board, side_t side) {
       return 0ULL;
     } else {
       if (~(get_king_flags(board)) & WHITE_RR) {
-        if (((king_bitboard << 1) & occ) == 0 && ((king_bitboard << 2) & occ) == 0)
-          if (((king_bitboard << 1) & check_bitboard) == 0 && ((king_bitboard << 2) & check_bitboard) == 0)
-            moves |= (king_bitboard << 2);
+        if (((king_bitboard << 1U) & occ) == 0 && ((king_bitboard << 2U) & occ) == 0)
+          if (((king_bitboard << 1U) & check_bitboard) == 0 && ((king_bitboard << 2U) & check_bitboard) == 0)
+            moves |= (king_bitboard << 2U);
       }
 
       if (~(get_king_flags(board)) & WHITE_LR) {
-        if (((king_bitboard >> 1) & occ) == 0 && ((king_bitboard >> 2) & occ) == 0)
-          if (((king_bitboard >> 1) & check_bitboard) == 0 && ((king_bitboard >> 2) & check_bitboard) == 0)
-            moves |= (king_bitboard >> 2);
+        if (((king_bitboard >> 1U) & occ) == 0 && ((king_bitboard >> 2U) & occ) == 0)
+          if (((king_bitboard >> 1U) & check_bitboard) == 0 && ((king_bitboard >> 2U) & check_bitboard) == 0)
+            moves |= (king_bitboard >> 2U);
       }
     }
   } else {
@@ -80,15 +80,15 @@ uint64_t compute_castling_moves(board_t* board, side_t side) {
       return 0ULL;
     } else {
       if (~(get_king_flags(board)) & BLACK_RR) {
-        if (((king_bitboard << 1) & occ) == 0 && ((king_bitboard << 2) & occ) == 0)
-          if (((king_bitboard << 1) & check_bitboard) == 0 && ((king_bitboard << 2) & check_bitboard) == 0)
-            moves |= (king_bitboard << 2);
+        if (((king_bitboard << 1U) & occ) == 0 && ((king_bitboard << 2U) & occ) == 0)
+          if (((king_bitboard << 1U) & check_bitboard) == 0 && ((king_bitboard << 2U) & check_bitboard) == 0)
+            moves |= (king_bitboard << 2U);
       }
 
       if (~(get_king_flags(board)) & BLACK_LR) {
-        if (((king_bitboard >> 1) & occ) == 0 && ((king_bitboard >> 2) & occ) == 0)
-          if (((king_bitboard >> 1) & check_bitboard) == 0 && ((king_bitboard >> 2) & check_bitboard) == 0)
-            moves |= (king_bitboard >> 2);
+        if (((king_bitboard >> 1U) & occ) == 0 && ((king_bitboard >> 2U) & occ) == 0)
+          if (((king_bitboard >> 1U) & check_bitboard) == 0 && ((king_bitboard >> 2U) & check_bitboard) == 0)
+            moves |= (king_bitboard >> 2U);
       }
     }
   }
