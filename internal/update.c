@@ -138,6 +138,23 @@ static void update_ep_square(board_t *board, uint64_t src_bitboard, side_t side,
   }
 }
 
+static void update_castling_rook_flags(board_t *board, uint64_t rook_src, side_t side) {
+  if (side == WHITE) {
+    if (rook_src & WHITE_INITIAL_LR) set_king_flags(board, WHITE_LR);
+    else if (rook_src & WHITE_INITIAL_RR) set_king_flags(board, WHITE_RR);
+  } else {
+    if (rook_src & BLACK_INITIAL_LR) set_king_flags(board, BLACK_LR);
+    else if (rook_src & BLACK_INITIAL_RR) set_king_flags(board, BLACK_RR);   
+  }
+}
+
+static void update_castling_king_flags(board_t *board, uint64_t king_src, side_t side) {
+  if (side == WHITE) {
+    if (king_src & WHITE_INITIAL_KING) set_king_flags(board, WHITE_KING_MOVED);
+  } else {
+    if (king_src & BLACK_INITIAL_KING) set_king_flags(board, BLACK_KING_MOVED);
+  }
+}
 
 static void add_promoted_piece(board_t *board, uint64_t target_bitboard, move_t flags)
 {
@@ -165,6 +182,7 @@ static void update_quiet(board_t *board, side_t side,
 {
     // updating bitboard for moved piece
     uint64_t quiet_bitboard = (src_bitboard | target_bitboard) ^ get_bitboard(board, moved_piece);
+
     update_bitboard(board, moved_piece, &quiet_bitboard);
 
 
@@ -174,6 +192,55 @@ static void update_quiet(board_t *board, side_t side,
 
     // updating ep square if need be
     update_ep_square(board, src_bitboard, side, target_bitboard, moved_piece);
+
+    // check if it's a rook move; update castling flags if needed
+    if (moved_piece == ALL_ROOKS) {
+      update_castling_rook_flags(board, src_bitboard, side);
+    }
+
+    // castling can only be a quiet move
+    // check for king movement and treat the case in which it is a castling move
+    if (moved_piece == ALL_KINGS) {
+      uint64_t qb_cs = 0U;
+      uint64_t sb_cs = 0U;
+
+      if (target_bitboard == (src_bitboard << 2)) {
+        // king-side castling
+
+        if (side == WHITE) {
+          qb_cs = (WHITE_INITIAL_RR | WHITE_INITIAL_RR >> 2) ^ get_bitboard(board, ALL_ROOKS);
+          update_bitboard(board, ALL_ROOKS, &qb_cs);
+
+          sb_cs = (WHITE_INITIAL_RR | WHITE_INITIAL_RR >> 2) ^ get_bitboard(board, side);
+          update_bitboard(board, side, &sb_cs);
+        } else {
+          qb_cs = (BLACK_INITIAL_RR | BLACK_INITIAL_RR >> 2) ^ get_bitboard(board, ALL_ROOKS);
+          update_bitboard(board, ALL_ROOKS, &qb_cs);
+
+          sb_cs = (BLACK_INITIAL_RR | BLACK_INITIAL_RR >> 2) ^ get_bitboard(board, side);
+          update_bitboard(board, side, &sb_cs);
+        }
+
+      } else if (target_bitboard == (src_bitboard >> 2)) {
+        //queen-side castling
+
+        if (side == WHITE) {
+          qb_cs = (WHITE_INITIAL_LR | WHITE_INITIAL_LR << 3) ^ get_bitboard(board, ALL_ROOKS);
+          update_bitboard(board, ALL_ROOKS, &qb_cs);
+
+          sb_cs = (WHITE_INITIAL_LR | WHITE_INITIAL_LR << 3) ^ get_bitboard(board, side);
+          update_bitboard(board, side, &sb_cs);
+        } else {
+          qb_cs = (BLACK_INITIAL_LR | BLACK_INITIAL_LR << 3) ^ get_bitboard(board, ALL_ROOKS);
+          update_bitboard(board, ALL_ROOKS, &qb_cs);
+
+          sb_cs = (BLACK_INITIAL_LR | BLACK_INITIAL_LR << 3) ^ get_bitboard(board, side);
+          update_bitboard(board, side, &sb_cs);
+        }
+      }
+
+      update_castling_king_flags(board, src_bitboard, side);
+    }
 }
 
 static void update_ep_capture(board_t *board, side_t side, uint64_t src_bitboard,
@@ -228,6 +295,16 @@ static void update_capture(board_t *board, side_t side, uint64_t src_bitboard,
     // updating side's bitboard
     uint64_t side_bitboard = (src_bitboard | target_bitboard) ^ get_bitboard(board, side);
     update_bitboard(board, side, &side_bitboard);
+
+    // check if it's a rook move; update castling flags if needed
+    if (moved_piece == ALL_ROOKS) {
+      update_castling_rook_flags(board, src_bitboard, side);
+    }
+
+    // same for the king
+    if (moved_piece == ALL_KINGS) {
+      update_castling_king_flags(board, src_bitboard, side);
+    }
 }
 
 static void update_prom_capture(board_t *board, side_t side, uint64_t src_bitboard,
@@ -268,7 +345,6 @@ static void update_quiet_prom(board_t *board, side_t side, uint64_t src_bitboard
     uint64_t side_bitboard = (src_bitboard | target_bitboard) ^ get_bitboard(board, side);
     update_bitboard(board, side, &side_bitboard);
 }
-
 
 static void update_by_in(board_t *board, side_t side, move_t in_move)
 {
@@ -353,6 +429,16 @@ static void update_by_gen(board_t *board, side_t side, move_t gen_move)
     }
 }
 
+static void update_check_num(board_t *board) {
+  if (compute_check_board(board, WHITE)) {
+    add_white_check(board);
+  }
+
+  if (compute_check_board(board, BLACK)) {
+    add_black_check(board);
+  }
+}
+
 void update(board_t *board, side_t side, move_t in_move, move_t gen_move)
 {
     if ((in_move == 0U && gen_move == 0U) || (in_move != 0U && gen_move != 0U))
@@ -364,4 +450,5 @@ void update(board_t *board, side_t side, move_t in_move, move_t gen_move)
 
     // update the check board for given side
     update_check_board(board, compute_check_board(board, side));
+    update_check_num(board);
 }

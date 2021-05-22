@@ -3,7 +3,6 @@
 #include "models/move.h"
 #include "update.h"
 
-
 static int in_check(board_t *board)
 {
   if (get_check_board(board))
@@ -32,9 +31,6 @@ arraylist_t *filter_moves(board_t *board, arraylist_t *moves, side_t side)
 
     // extracting current move
     move_t crt_move = *((move_t *)get(moves, i));
-
-    //TODO: check if current move is castling and if it is check to see
-    // if king is in check before adding it to @filtered_moves
 
     // update board
     update(board, side, 0U, crt_move);

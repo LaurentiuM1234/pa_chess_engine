@@ -12,6 +12,7 @@
 #define M_BISHOP_PROM 32U
 #define M_QUEEN_PROM 64U
 #define M_EP 128U
+// #define M_CASTLE 256U
 /*=================================*/
 
 /*===========DECODE KEYS===========*/

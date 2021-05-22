@@ -201,7 +201,7 @@ void add_pawn_moves(arraylist_t *moves, board_t *board, side_t side)
 
 static uint64_t black_pawn_attack_board(board_t *board, unsigned int position)
 {
-  // extracting white pawns
+  // extracting black pawns
   uint64_t pawns = get_pawns(board, BLACK);
 
   // computing left captures board
@@ -227,6 +227,8 @@ static uint64_t white_pawn_attack_board(board_t *board, unsigned int position)
 
   return ((left_captures & to_bitboard(position)) >> 9U)
   | ((right_captures & to_bitboard(position)) >> 7U);
+
+
 }
 
 uint64_t pawn_attack_board(board_t *board, unsigned int position)

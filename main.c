@@ -3,6 +3,7 @@
 #include "debug/fatal.h"
 #include "logic.h"
 
+
 int main()
 {
     board_t *board = create_board();

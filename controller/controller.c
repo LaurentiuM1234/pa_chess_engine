@@ -113,7 +113,9 @@ void do_handshake(controller_t *controller)
         return;
 
     // sending supported features
+    printf("feature done=0\n");
     printf(ENGINE_FEATURES);
+    printf("feature done=1\n");
 
     // flushing stdout buffer
     fflush(stdout);

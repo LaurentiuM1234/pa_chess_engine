@@ -42,11 +42,68 @@ uint64_t compute_king_moves(uint64_t king_board)
       | north_east | north_west | south_east | south_west;
 }
 
+uint64_t compute_castling_moves(board_t* board, side_t side) {
+  uint64_t occ = get_occupancy(board);
+  uint64_t check_bitboard = get_check_board(board);
+  uint64_t king_bitboard = get_king(board, side);
+
+  uint64_t moves = 0ULL;
+
+  if (side == WHITE) {
+    if (get_king_flags(board) & WHITE_KING_MOVED)
+      return 0ULL;
+    if ((get_king_flags(board) & WHITE_RR) && (get_king_flags(board) & WHITE_LR))
+      return 0ULL;
+
+    if (get_king_flags(board) & WHITE_KING_IN_CHECK) {
+      return 0ULL;
+    } else {
+      if (~(get_king_flags(board)) & WHITE_RR) {
+        if (((king_bitboard << 1U) & occ) == 0 && ((king_bitboard << 2U) & occ) == 0)
+          if (((king_bitboard << 1U) & check_bitboard) == 0 && ((king_bitboard << 2U) & check_bitboard) == 0)
+            moves |= (king_bitboard << 2U);
+      }
+
+      if (~(get_king_flags(board)) & WHITE_LR) {
+        if (((king_bitboard >> 1U) & occ) == 0 && ((king_bitboard >> 2U) & occ) == 0)
+          if (((king_bitboard >> 1U) & check_bitboard) == 0 && ((king_bitboard >> 2U) & check_bitboard) == 0)
+            moves |= (king_bitboard >> 2U);
+      }
+    }
+  } else {
+    if (get_king_flags(board) & BLACK_KING_MOVED)
+      return 0ULL;
+    if ((get_king_flags(board) & BLACK_RR) && (get_king_flags(board) & BLACK_LR))
+      return 0ULL;
+
+    if (get_king_flags(board) & BLACK_KING_IN_CHECK) {
+      return 0ULL;
+    } else {
+      if (~(get_king_flags(board)) & BLACK_RR) {
+        if (((king_bitboard << 1U) & occ) == 0 && ((king_bitboard << 2U) & occ) == 0)
+          if (((king_bitboard << 1U) & check_bitboard) == 0 && ((king_bitboard << 2U) & check_bitboard) == 0)
+            moves |= (king_bitboard << 2U);
+      }
+
+      if (~(get_king_flags(board)) & BLACK_LR) {
+        if (((king_bitboard >> 1U) & occ) == 0 && ((king_bitboard >> 2U) & occ) == 0)
+          if (((king_bitboard >> 1U) & check_bitboard) == 0 && ((king_bitboard >> 2U) & check_bitboard) == 0)
+            moves |= (king_bitboard >> 2U);
+      }
+    }
+  }
+
+  return moves;
+}
+
 void add_king_moves(arraylist_t *moves, board_t *board, side_t side)
 {
   uint64_t king_board = get_king(board, side);
   uint64_t king_moves_board = compute_king_moves(king_board) & ~get_side(board, side);
   add_moves(board, moves, king_moves_board, to_position(king_board));
+
+  uint64_t castling_moves = compute_castling_moves(board, side);
+  add_moves(board, moves, castling_moves, to_position(king_board));
 }
 
 static uint64_t side_king_attack_board(board_t *board, unsigned int position, side_t side)

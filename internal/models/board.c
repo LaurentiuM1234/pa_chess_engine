@@ -10,6 +10,23 @@ struct board {
     arraylist_t *_pieces;
     uint64_t _check_board;
     unsigned int _ep_square;
+
+    /*
+        << 0 : right rook
+        << 1 : left rook
+        << 2 : king was in check / moved
+        << 3 : king IS IN CHECK NOW
+        ^^ for white
+
+        << 4, << 5, << 6, << 7 : same for black
+    */
+    uint8_t _king_flags;
+
+    uint64_t _initial_rooks_bitboard;
+    uint64_t _initial_kings_bitboard;
+
+    unsigned int white_checks_num;
+    unsigned int black_checks_num;
 };
 
 
@@ -23,6 +40,14 @@ static board_t *alloc_board(void)
     board->_pieces = create_list(sizeof(uint64_t));
     board->_ep_square = 0U;
     board->_check_board = 0U;
+
+    // for castling (both sides)
+    board->_king_flags = 0U;
+    board->_initial_rooks_bitboard = 9295429630892703873ULL;
+    board->_initial_kings_bitboard = 1152921504606846992ULL;
+
+    board->white_checks_num = 0;
+    board->black_checks_num = 0;
 
     if (!board->_pieces) {
         free(board);
@@ -103,6 +128,12 @@ uint64_t get_bishops(board_t *board, side_t side)
            *(uint64_t*)get(board->_pieces, side);
 }
 
+uint64_t get_rooks(board_t *board, side_t side)
+{
+    return *(uint64_t*)get(board->_pieces, ALL_ROOKS)
+           & *(uint64_t*)get(board->_pieces, side);
+}
+
 uint64_t get_queen(board_t *board, side_t side)
 {
     return *(uint64_t*)get(board->_pieces, ALL_QUEENS)
@@ -145,8 +176,14 @@ void clear_board(board_t *board)
     // clearning the check board
     board->_check_board = 0U;
 
+    // clearing kings flags
+    board->_king_flags = 0U;
+
     // initializing the array list
     init_pieces(board->_pieces);
+
+    board->white_checks_num = 0;
+    board->black_checks_num = 0;
 }
 
 void precompute_tables() {
@@ -179,6 +216,49 @@ uint64_t get_check_board(board_t *board)
   return board->_check_board;
 }
 
+uint64_t get_king_flags(board_t *board)
+{
+  return board->_king_flags; 
+}
+
+uint64_t get_initial_rooks(board_t *board)
+{
+  return board->_initial_rooks_bitboard;
+}
+
+unsigned int get_white_checks_num(board_t *board)
+{
+  return board->white_checks_num;
+}
+unsigned int get_black_checks_num(board_t *board)
+{
+  return board->black_checks_num;
+}
+
+void add_white_check(board_t *board)
+{
+  ++(board->white_checks_num);
+}
+void add_black_check(board_t *board)
+{
+  ++(board->black_checks_num);
+}
+
+uint64_t get_initial_kings(board_t *board)
+{
+  return board->_initial_kings_bitboard;
+}
+
+void set_king_flags(board_t *board, uint64_t flag)
+{
+  board->_king_flags |= flag;
+}
+
+void unset_king_flags(board_t *board, uint64_t flag)
+{
+  board->_king_flags &= ~flag;
+}
+
 void board_copy(board_t *dest, board_t *src)
 {
   dest->_check_board = src->_check_board;
@@ -188,4 +268,7 @@ void board_copy(board_t *dest, board_t *src)
     uint64_t crt_board = get_bitboard(src, i);
     update_bitboard(dest, i, &crt_board);
   }
+
+  dest->white_checks_num = src->white_checks_num;
+  dest->black_checks_num = src->black_checks_num;
 }

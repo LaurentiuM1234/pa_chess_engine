@@ -40,7 +40,6 @@ static void convert_prom_flags(char *buffer, move_t flags)
     buffer[9] = 'n';
 }
 
-
 move_t encode_move(move_t source, move_t target, move_t flags, move_t captured_piece)
 {
     return source | target << 8U | flags << 16U | captured_piece << 24U;

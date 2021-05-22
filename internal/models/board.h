@@ -6,6 +6,22 @@
 
 #include "move.h"
 
+#define WHITE_RR 1U
+#define WHITE_LR 2U
+#define WHITE_KING_MOVED 4U
+#define WHITE_KING_IN_CHECK 8U
+#define BLACK_RR 16U
+#define BLACK_LR 32U
+#define BLACK_KING_MOVED 64U
+#define BLACK_KING_IN_CHECK 128U
+
+#define WHITE_INITIAL_LR 1U
+#define WHITE_INITIAL_RR 128U
+#define WHITE_INITIAL_KING 16U
+#define BLACK_INITIAL_LR 72057594037927936U
+#define BLACK_INITIAL_RR 9223372036854775808U
+#define BLACK_INITIAL_KING 1152921504606846976U
+
 enum piece_code{
     ALL_WHITES,
     ALL_BLACKS,
@@ -79,12 +95,12 @@ uint64_t get_knights(board_t *board, side_t side);
 uint64_t get_bishops(board_t *board, side_t side);
 
 /*
- * Retrieve the queen bitboard for a given side
+ * Retrieve the rooks bitboard for a given side.
  * @params: board -> pointer to a board object
  *          side -> side for which the retrieval is done
- * @returns: the queen bitboard for given side
+ * @returns: the rooks bitboard for given side
  */
-uint64_t get_queen(board_t *board, side_t side);
+uint64_t get_rooks(board_t *board, side_t side);
 
 /*
  * Retrieve the kings bitboard for a given side
@@ -100,6 +116,15 @@ uint64_t get_king(board_t *board, side_t side);
  *          index -> position of the bitboard to be retrieved
  * @returns: the searched bitboard
  */
+ 
+ /*
+ * Retrieve the queen bitboard for a given side
+ * @params: board -> pointer to a board object
+ *          side -> side for which the retrieval is done
+ * @returns: the queen bitboard for given side
+ */
+uint64_t get_queen(board_t *board, side_t side);
+ 
 uint64_t get_bitboard(board_t *board, int index);
 
 /*
@@ -164,6 +189,37 @@ void update_check_board(board_t *board, uint64_t new);
  * @returns: value of the check board
  */
 uint64_t get_check_board(board_t *board);
+
+/*
+ * Retrieve the king flags.
+ * @params: board -> pointer to board object
+ * @returns: king flags
+ */
+uint64_t get_king_flags(board_t *board);
+
+/*
+ * Retrieve the value of the initial rook board.
+ * @params: board -> pointer to board object
+ * @returns: value of the initial rook board
+ */
+uint64_t get_initial_rooks(board_t *board);
+
+unsigned int get_white_checks_num(board_t *board);
+unsigned int get_black_checks_num(board_t *board);
+
+void add_white_check(board_t *board);
+void add_black_check(board_t *board);
+
+/*
+ * Retrieve the value of the initial king board.
+ * @params: board -> pointer to board object
+ * @returns: value of the initial king board
+ */
+uint64_t get_initial_kings(board_t *board);
+
+void set_king_flags(board_t *board, uint64_t flag);
+
+void unset_king_flags(board_t *board, uint64_t flag);
 
 /*
  * Copy contents of src to dest.

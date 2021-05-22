@@ -5,6 +5,10 @@
 #include "internal/eval.h"
 #include <string.h>
 
+#define minus_inf -2147483647
+#define plus_inf 2147483647
+
+#define DEPTH 4
 
 void do_internal_logic(controller_t *controller, board_t *board)
 {
@@ -32,7 +36,20 @@ void do_internal_logic(controller_t *controller, board_t *board)
                 set_flag(controller, C_RESIGN);
                 return;
             }
-            move_t best_move = select_move(available_moves, eval_pawns);
+            // move_t best_move = select_move(board, eval, is_set(controller, C_ES), alpha=minus_inf, beta=plus_inf, depth, &best_move);
+
+            //move_t best_move = select_move(board, eval, is_set(controller, C_ES), minus_inf, plus_inf, DEPTH, &best_move);
+
+            // decides best move
+            move_t best_move;
+            // best_move = (select_move()) -> move;
+            best_move = (select_move(board, eval, available_moves, is_set(controller, C_ES),
+                         minus_inf, plus_inf, DEPTH)).move;
+
+            /*print_move(best_move);
+            printf("primary fnc checks:\n");
+            printf("\n%d\n", get_white_checks_num(board));
+            printf("%d\n\n", get_black_checks_num(board));*/
 
             // updating board
             update(board, is_set(controller, C_ES), 0U, best_move);
@@ -47,7 +64,7 @@ void do_internal_logic(controller_t *controller, board_t *board)
             toggle_flag(controller, C_STM);
 
             // destroying list of moves
-            destroy_list(&available_moves);
+            //destroy_list(&available_moves);
         }
     } else {
         if (strlen(get_in_buffer(controller)) != 0) {
