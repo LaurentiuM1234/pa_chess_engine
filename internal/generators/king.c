@@ -104,9 +104,6 @@ void add_king_moves(arraylist_t *moves, board_t *board, side_t side)
 
   uint64_t castling_moves = compute_castling_moves(board, side);
   add_moves(board, moves, castling_moves, to_position(king_board));
-
-  printf("king moves castling\n");
-  print_bitboard(castling_moves);
 }
 
 static uint64_t side_king_attack_board(board_t *board, unsigned int position, side_t side)

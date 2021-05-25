@@ -204,6 +204,12 @@ uint64_t get_king_flags(board_t *board);
  */
 uint64_t get_initial_rooks(board_t *board);
 
+unsigned int get_white_checks_num(board_t *board);
+unsigned int get_black_checks_num(board_t *board);
+
+void add_white_check(board_t *board);
+void add_black_check(board_t *board);
+
 /*
  * Retrieve the value of the initial king board.
  * @params: board -> pointer to board object

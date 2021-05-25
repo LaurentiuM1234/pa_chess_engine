@@ -119,7 +119,6 @@ static void add_quiet(arraylist_t *moves, board_t *board, side_t side, uint64_t 
 
     // generate move
     move_t encoded_move = encode_move(source_square, target_square, M_QUIET, 0U);
-    print_move(encoded_move);
 
     // add move to the move list
     push(moves, &encoded_move);

@@ -24,6 +24,9 @@ struct board {
 
     uint64_t _initial_rooks_bitboard;
     uint64_t _initial_kings_bitboard;
+
+    unsigned int white_checks_num;
+    unsigned int black_checks_num;
 };
 
 
@@ -42,6 +45,9 @@ static board_t *alloc_board(void)
     board->_king_flags = 0U;
     board->_initial_rooks_bitboard = 9295429630892703873ULL;
     board->_initial_kings_bitboard = 1152921504606846992ULL;
+
+    board->white_checks_num = 0;
+    board->black_checks_num = 0;
 
     if (!board->_pieces) {
         free(board);
@@ -175,6 +181,9 @@ void clear_board(board_t *board)
 
     // initializing the array list
     init_pieces(board->_pieces);
+
+    board->white_checks_num = 0;
+    board->black_checks_num = 0;
 }
 
 void precompute_tables() {
@@ -217,6 +226,24 @@ uint64_t get_initial_rooks(board_t *board)
   return board->_initial_rooks_bitboard;
 }
 
+unsigned int get_white_checks_num(board_t *board)
+{
+  return board->white_checks_num;
+}
+unsigned int get_black_checks_num(board_t *board)
+{
+  return board->black_checks_num;
+}
+
+void add_white_check(board_t *board)
+{
+  ++(board->white_checks_num);
+}
+void add_black_check(board_t *board)
+{
+  ++(board->black_checks_num);
+}
+
 uint64_t get_initial_kings(board_t *board)
 {
   return board->_initial_kings_bitboard;
@@ -241,4 +268,7 @@ void board_copy(board_t *dest, board_t *src)
     uint64_t crt_board = get_bitboard(src, i);
     update_bitboard(dest, i, &crt_board);
   }
+
+  dest->white_checks_num = src->white_checks_num;
+  dest->black_checks_num = src->black_checks_num;
 }

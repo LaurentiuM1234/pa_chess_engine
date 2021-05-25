@@ -429,6 +429,16 @@ static void update_by_gen(board_t *board, side_t side, move_t gen_move)
     }
 }
 
+static void update_check_num(board_t *board) {
+  if (compute_check_board(board, WHITE)) {
+    add_white_check(board);
+  }
+
+  if (compute_check_board(board, BLACK)) {
+    add_black_check(board);
+  }
+}
+
 void update(board_t *board, side_t side, move_t in_move, move_t gen_move)
 {
     if ((in_move == 0U && gen_move == 0U) || (in_move != 0U && gen_move != 0U))
@@ -440,4 +450,5 @@ void update(board_t *board, side_t side, move_t in_move, move_t gen_move)
 
     // update the check board for given side
     update_check_board(board, compute_check_board(board, side));
+    update_check_num(board);
 }

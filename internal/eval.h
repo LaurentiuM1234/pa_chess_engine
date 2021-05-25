@@ -5,6 +5,17 @@
 #include "containers/arraylist.h"
 #include "models/board.h"
 
+typedef struct best_move {
+	int score;
+	move_t move;
+} Best_move;
+
+typedef struct move_score {
+	int score;
+	int index; // position in arraylist
+} move_score;
+
+
 typedef int (*eval_t)(board_t*, move_t);
 
 /*
@@ -12,7 +23,7 @@ typedef int (*eval_t)(board_t*, move_t);
  * @params: move -> given move for which the score is computed
  * @returns: the computed score
  */
-int eval(board_t *board, move_t move);
+int eval(board_t *board, side_t side);
 
 
 /*
@@ -22,6 +33,6 @@ int eval(board_t *board, move_t move);
  *          score of a move
  * @returns: the move with the highest score
  */
-move_t select_move(board_t *board, arraylist_t* moves, eval_t move_evaluator);
-
+Best_move select_move(board_t *board, eval_t move_evaluator, arraylist_t* moves,
+					  side_t side, int alpha, int beta, int depth);
 #endif
